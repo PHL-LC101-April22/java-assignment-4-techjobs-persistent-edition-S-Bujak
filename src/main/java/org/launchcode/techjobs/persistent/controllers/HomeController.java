@@ -2,7 +2,10 @@ package org.launchcode.techjobs.persistent.controllers;
 
 import org.launchcode.techjobs.persistent.models.Employer;
 import org.launchcode.techjobs.persistent.models.Job;
+import org.launchcode.techjobs.persistent.models.Skill;
 import org.launchcode.techjobs.persistent.models.data.EmployerRepository;
+import org.launchcode.techjobs.persistent.models.data.JobRepository;
+import org.launchcode.techjobs.persistent.models.data.SkillRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,6 +24,12 @@ public class HomeController {
 
     @Autowired
     private EmployerRepository employerRepository;
+
+    @Autowired
+    private JobRepository jobRepository;
+
+    @Autowired
+    private SkillRepository skillRepository;
 
     @RequestMapping("")
     public String index(Model model) {
@@ -52,6 +61,9 @@ public class HomeController {
             Employer employer = optEmployer.get();
             newJob.setEmployer(employer);
         }
+        List<Skill> skillObjs = (List<Skill>) skillRepository.findAllById(skills);
+        newJob.setSkills(skillObjs);
+        jobRepository.save(newJob);
 
         return "redirect:";
     }
@@ -59,7 +71,16 @@ public class HomeController {
     @GetMapping("view/{jobId}")
     public String displayViewJob(Model model, @PathVariable int jobId) {
 
-        return "view";
+        Optional optionalJob = jobRepository.findById(jobId);
+
+        if (optionalJob.isPresent()) {
+            Job job = (Job) optionalJob.get();
+            model.addAttribute("Job", job);
+            return "view/{jobId}";
+        } else {
+            return "redirect:../";
+        }
+        //return "view";
     }
 
 
