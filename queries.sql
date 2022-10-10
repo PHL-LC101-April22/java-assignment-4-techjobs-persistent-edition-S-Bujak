@@ -6,10 +6,8 @@
 -- skills VARCHAR
 
 -- Part 2: Test it with SQL
-
-SELECT name
-FROM employer
-WHERE location = 'St. Louis City';
+--"SELECT\\s+name\\s+FROM\\s+employer\\s+WHERE\\s+location\\s+=\\s+\"St.\\s+Louis\\s+City\";"
+SELECT name FROM employer WHERE location = "St. Louis City";
 
 -- Part 3: Test it with SQL
 
